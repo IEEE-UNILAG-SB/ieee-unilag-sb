@@ -2,9 +2,9 @@ import { Router } from "express";
 import { body } from "express-validator";
 import { subscribeUser } from "../controllers/newsletter";
 
-const router = Router();
+const newsletterRouter = Router();
 
-router.post(
+newsletterRouter.post(
   "/signup",
   [
     body("email")
@@ -15,4 +15,4 @@ router.post(
   subscribeUser,
 );
 
-export default router;
+export default newsletterRouter;
