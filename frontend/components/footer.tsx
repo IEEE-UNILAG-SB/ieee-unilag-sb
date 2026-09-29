@@ -37,24 +37,24 @@ function Logo() {
 
 const quickLinks = [
   { label: "Home", href: "/" },
-  { label: "About Us", href: "/about" },
-  { label: "Event", href: "/events" },
-  { label: "Membership", href: "/membership" },
-  { label: "Contact Us", href: "/contact" },
+  { label: "About Us", href: "/#about" },
+  { label: "Events", href: "/#events" },
+  { label: "Membership", href: "/#join" },
+  { label: "Contact Us", href: "/#contact" },
 ];
 
 const resources = [
-  { label: "Projects", href: "/projects" },
-  { label: "Publications", href: "/publications" },
-  { label: "Workshops", href: "/workshops" },
-  { label: "Career Center", href: "/career" },
+  { label: "IEEE Xplore", href: "https://ieeexplore.ieee.org" },
+  { label: "IEEE Potentials", href: "https://potentials.ieee.org" },
+  { label: "IEEEXtreme", href: "https://ieeextreme.org" },
+  { label: "TryEngineering", href: "https://tryengineering.org" },
 ];
 
 const connect = [
-  { label: "Alumni Network", href: "/alumni" },
-  { label: "Industry Partners", href: "/partners" },
-  { label: "Volunteer", href: "/volunteer" },
-  { label: "Support Us", href: "/support" },
+  { label: "Instagram", href: "https://www.instagram.com/ieee_unilag" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/company/ieee-unilag-sb" },
+  { label: "Substack", href: "https://ieeeunilag.substack.com" },
+  { label: "WhatsApp Community", href: "https://chat.whatsapp.com/ieeeunilag" },
 ];
 
 function FooterColumn({

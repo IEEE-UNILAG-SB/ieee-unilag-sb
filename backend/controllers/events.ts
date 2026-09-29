@@ -41,11 +41,11 @@ export const getAllEvents = async (req: Request, res: Response, next: NextFuncti
 
 export const createEvent = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { title, description, date, location, banner_url } = req.body;
-        if (!title || !description || !date || !location || !banner_url) {
+        const { title, description, date, location, banner_url, registration_link } = req.body;
+        if (!title || !description || !date || !location || !banner_url || !registration_link) {
             return res.status(400).json({ message: "All fields are required", data: null });
         }
-        const newEvent = new Event({ title, description, date, location, banner_url });
+        const newEvent = new Event({ title, description, date, location, banner_url, registration_link });
         await newEvent.save();
         return res.status(201).json({ message: "Event created successfully", data: newEvent });
     } catch (error) {
@@ -56,8 +56,8 @@ export const createEvent = async (req: Request, res: Response, next: NextFunctio
 export const updateEvent = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id } = req.params;
-        const { title, description, date, location, banner_url } = req.body;
-        const updatedEvent = await Event.findByIdAndUpdate(id, { title, description, date, location, banner_url }, { new: true, runValidators: true });
+        const { title, description, date, location, banner_url, registration_link } = req.body;
+        const updatedEvent = await Event.findByIdAndUpdate(id, { title, description, date, location, banner_url, registration_link }, { new: true, runValidators: true });
         if (!updatedEvent) {
             return res.status(404).json({ message: "Event not found", data: null });
         }

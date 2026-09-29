@@ -5,7 +5,7 @@ export interface IEvents extends Document {
     body: string;
     location: string;
     banner_url: string;
-    registeration_link: string
+    registration_link: string
 }
 
 const eventsSchema: Schema = new Schema(
@@ -14,7 +14,7 @@ const eventsSchema: Schema = new Schema(
         body: { type: String, required: true },
         location: { type: String, required: true, default: "to be determined!" },
         banner_url: { type: String, required: true, },
-        registeration_link: { type: String, required: true, }
+        registration_link: { type: String, required: true }
     },
     { timestamps: true },
 );

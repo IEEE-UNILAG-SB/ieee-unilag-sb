@@ -2,6 +2,7 @@
 import { EventsSection } from "../components/upcoming-events/EventsSection";
 import { Footer } from "@/components/footer";
 import { NewsletterSection } from "@/components/newsletter-section";
+import { JoinSection } from "@/components/join-section";
 import Stats from "@/components/Stats";
 import WWA from "@/components/WWA";
 import Spotlight from "@/components/spotlight";
@@ -20,14 +21,15 @@ export default function Home() {
         onClick={() => setMenuOpen(false)} 
         className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm" 
       />}
-      <main 
-      inert = {menuOpen ? true : undefined}
-      className="">
+      <main
+        inert={menuOpen ? true : undefined}
+        className="">
         <Hero />
         <Stats />
         <WWA />
         <EventsSection />
         <Spotlight />
+        <JoinSection />
         <NewsletterSection />
         <Footer />
       </main>
