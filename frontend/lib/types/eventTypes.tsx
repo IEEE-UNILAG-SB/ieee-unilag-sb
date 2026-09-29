@@ -4,6 +4,7 @@ export interface EventCardType {
     title: string,
     description: string,
     location: string,
+    registration_link?: string,
 }
 export interface EventsSectionProps {
     data: EventCardType

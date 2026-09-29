@@ -69,6 +69,7 @@ npm start
 - `build` — Compile TypeScript to `dist/`
 - `start` — Run compiled `dist/server.js`
 - `lint` — Run ESLint over TypeScript files
+- `seed` — Seed the database with sample events
 
 ## Environment variables
 
@@ -77,8 +78,46 @@ Create `backend/.env` from `backend/.env.example`. Required variables:
 - `MONGODB_URI` — MongoDB connection string
 - `PORT` — server port (default: `5000`)
 - `NODE_ENV` — `development` | `production`
+- `FRONTEND_URL` — Comma-separated list of allowed frontend origins (production only)
 
 See `backend/.env.example` for a template.
+
+## API Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/` | Health check |
+| POST | `/api/v1/newsletter/signup` | Subscribe to newsletter |
+| GET | `/api/v1/events` | Get latest 3 events |
+| GET | `/api/v1/events/all` | Get all events (paginated) |
+| POST | `/api/v1/events` | Create a new event |
+| PUT | `/api/v1/events/:id` | Update an event |
+| DELETE | `/api/v1/events/:id` | Delete an event |
+
+## Deployment
+
+### Backend (Render)
+
+1. Push your code to GitHub
+2. Create a new Web Service on Render
+3. Connect your repository
+4. Set build command: `npm install && npm run build`
+5. Set start command: `npm start`
+6. Add environment variables in the Render dashboard:
+   - `MONGODB_URI` — Your MongoDB Atlas connection string
+   - `PORT` — 5000
+   - `NODE_ENV` — production
+   - `FRONTEND_URL` — Your Vercel domain (e.g., `https://your-app.vercel.app`)
+7. Deploy
+
+### Frontend (Vercel)
+
+1. Push your code to GitHub
+2. Import the `frontend/` directory as a new project on Vercel
+3. Set environment variables:
+   - `NEXT_PUBLIC_API_URL` — Your Render backend URL (e.g., `https://your-app.onrender.com`)
+   - `NEXT_PUBLIC_BASE_URL` — Your production domain
+4. Deploy
 
 ## Contribution Workflow
 

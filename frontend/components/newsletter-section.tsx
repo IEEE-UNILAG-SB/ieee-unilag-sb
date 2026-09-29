@@ -4,8 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "";
+import { subscribeToNewsletter } from "@/lib/api";
 
 export function NewsletterSection() {
   const [email, setEmail] = useState("");
@@ -18,23 +17,13 @@ export function NewsletterSection() {
     setStatus("loading");
     setMessage("");
     try {
-      const res = await fetch(`${API_URL}/api/v1/newsletter/signup`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: email.trim() }),
-      });
-      const data = await res.json().catch(() => ({}));
-      if (res.ok && data.success) {
-        setStatus("success");
-        setMessage(data.message ?? "Thanks for subscribing!");
-        setEmail("");
-      } else {
-        setStatus("error");
-        setMessage(data.message ?? data.errors?.[0]?.msg ?? "Something went wrong.");
-      }
-    } catch {
+      const data = await subscribeToNewsletter(email.trim());
+      setStatus("success");
+      setMessage(data.message ?? "Thanks for subscribing!");
+      setEmail("");
+    } catch (err) {
       setStatus("error");
-      setMessage("Could not connect. Please try again.");
+      setMessage(err instanceof Error ? err.message : "Something went wrong.");
     }
   }
 

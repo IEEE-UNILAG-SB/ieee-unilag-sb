@@ -13,7 +13,7 @@ const statArray: arrayStat[] = [
   { users: "500+",   label: "Active Members" },
   { users: "120+",   label: "Events Annually" },  
   { users: "15",     label: "Technical Societies" },
-  { users: "Global", label: "Active Members" },  
+  { users: "Global", label: "Network Reach" },  
 ]
 
 const containerVariants = {

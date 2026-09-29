@@ -20,12 +20,15 @@ const EventCard = ( {data}: EventsSectionProps) => {
           <MapPin className="fill-[#00629B]" />
           <span className="font-inter text-[12px] font-medium text-[#00629B]">{data.location}</span>
         </div>
-        <button type="button"
-        className="bg-[#025BA2] flex w-fit py-4 px-5 rounded-[99px] gap-x-7.5 items-center" 
+        <a
+          href={data.registration_link}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="bg-[#025BA2] flex w-fit py-4 px-5 rounded-[99px] gap-x-7.5 items-center hover:bg-[#0368b8] transition-colors"
         >
-          <span className="font-inter text-[18px] font-medium ">Register Now</span>
+          <span className="font-inter text-[18px] font-medium">Register Now</span>
           <ArrowRight className="" />
-        </button>
+        </a>
       </section>
     </article>
   )
