@@ -1,6 +1,6 @@
 {
 	"name": "backend",
-	"version": "0.0.0",
+	"version": "0.2.0",
 	"private": true,
 	"scripts": {
 		"dev": "ts-node-dev --respawn --transpile-only --ignore-watch node_modules server.ts",
