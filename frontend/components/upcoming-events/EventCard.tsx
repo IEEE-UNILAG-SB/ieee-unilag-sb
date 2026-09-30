@@ -1,21 +1,41 @@
 'use client'
-import { MapPin, ArrowRight } from "lucide-react"
+import { MapPin, ArrowRight, CalendarDays } from "lucide-react"
 import { EventCardType, EventsSectionProps } from "@/lib/types"
 
+// Explicit locale + UTC timezone keep server and client rendering identical (no hydration mismatch).
+function formatEventDate(value?: string): string | null {
+  if (!value) return null;
+  const time = Date.parse(value);
+  if (Number.isNaN(time)) return null;
+  return new Date(time).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    timeZone: "UTC",
+  });
+}
+
 const EventCard = ( {data}: EventsSectionProps) => {
+  const eventDate = formatEventDate(data.date ?? data.createdAt);
   return (
     <article className="bg-white flex flex-col justify-between gap-y-3.5 p-5 rounded-[30px] w-full h-auto">
       <section className="flex flex-col gap-y-3.5">
         <img
         className="rounded-t-4xl"
-        src={data.image} 
-        alt="event-image" />
+        src={data.image}
+        alt={data.title} />
         <div className="flex flex-col gap-y-2">
           <h2 className="font-inter text-[18px] font-medium text-[#475569]">{data.title}</h2>
           <p className="font-inter text-[12px] text-[#475569]">{data.description}</p>
         </div>
       </section>
       <section className="flex flex-col gap-y-[7.5px]">
+        {eventDate && (
+          <div className="flex items-center gap-x-2">
+            <CalendarDays className="text-[#00629B]" />
+            <span className="font-inter text-[12px] font-medium text-[#00629B]">{eventDate}</span>
+          </div>
+        )}
         <div className="flex items-center gap-x-2">
           <MapPin className="fill-[#00629B]" />
           <span className="font-inter text-[12px] font-medium text-[#00629B]">{data.location}</span>

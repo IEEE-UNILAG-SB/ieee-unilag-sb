@@ -4,13 +4,16 @@ import EventCard from "./EventCard";
 import { EventCardType } from "@/lib/types";
 import { fetchLatestEvents, EventData } from "@/lib/api";
 
-function mapEventToCardType(event: EventData): EventCardType {
+export function mapEventToCardType(event: EventData): EventCardType {
   return {
     id: event._id,
     image: event.banner_url,
     title: event.header,
     description: event.body,
+    date: event.date,
+    createdAt: event.createdAt,
     location: event.location,
+    registration_link: event.registration_link,
   };
 }
 
@@ -46,12 +49,12 @@ export const EventsSection = () => {
   }, []);
 
   const handleViewMore = () => {
-    window.location.href = "/membership";
+    window.location.href = "/events";
   };
 
   if (loading) {
     return (
-      <section id="events" className="font-space w-full py-20 lg:pt-8 px-6 md:px-12 lg:px-17 bg-[#1E293B] text-white flex flex-col gap-y-15 lg:gap-y-24 justify-between items-center">
+      <section id="events" className="font-space w-full py-20 lg:pt-8 px-6 md:px-12 lg:px-17 scroll-mt-24 bg-[#1E293B] text-white flex flex-col gap-y-15 lg:gap-y-24 justify-between items-center">
         <div className="flex w-full justify-center lg:justify-between items-center">
           <h1 className="font-bold text-3xl">Upcoming Events</h1>
         </div>
@@ -66,7 +69,7 @@ export const EventsSection = () => {
 
   if (error) {
     return (
-      <section id="events" className="font-space w-full py-20 lg:pt-8 px-6 md:px-12 lg:px-17 bg-[#1E293B] text-white flex flex-col gap-y-15 lg:gap-y-24 justify-between items-center">
+      <section id="events" className="font-space w-full py-20 lg:pt-8 px-6 md:px-12 lg:px-17 scroll-mt-24 bg-[#1E293B] text-white flex flex-col gap-y-15 lg:gap-y-24 justify-between items-center">
         <div className="flex w-full justify-center lg:justify-between items-center">
           <h1 className="font-bold text-3xl">Upcoming Events</h1>
         </div>
@@ -80,7 +83,7 @@ export const EventsSection = () => {
 
   if (events.length === 0) {
     return (
-      <section id="events" className="font-space w-full py-20 lg:pt-8 px-6 md:px-12 lg:px-17 bg-[#1E293B] text-white flex flex-col gap-y-15 lg:gap-y-24 justify-between items-center">
+      <section id="events" className="font-space w-full py-20 lg:pt-8 px-6 md:px-12 lg:px-17 scroll-mt-24 bg-[#1E293B] text-white flex flex-col gap-y-15 lg:gap-y-24 justify-between items-center">
         <div className="flex w-full justify-center lg:justify-between items-center">
           <h1 className="font-bold text-3xl">Upcoming Events</h1>
         </div>
@@ -90,7 +93,7 @@ export const EventsSection = () => {
   }
 
   return (
-    <section id="events" className="font-space w-full py-20 lg:pt-8 px-6 md:px-12 lg:px-17 bg-[#1E293B] text-white flex flex-col gap-y-15 lg:gap-y-24 justify-between items-center">
+    <section id="events" className="font-space w-full py-20 lg:pt-8 px-6 md:px-12 lg:px-17 scroll-mt-24 bg-[#1E293B] text-white flex flex-col gap-y-15 lg:gap-y-24 justify-between items-center">
       <div className="flex w-full justify-center lg:justify-between items-center">
         <h1 className="font-bold text-3xl">Upcoming Events</h1>
         <button
@@ -118,4 +121,3 @@ export const EventsSection = () => {
     </section>
   );
 }
-

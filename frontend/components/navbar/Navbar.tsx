@@ -10,11 +10,11 @@ import { cn } from "@/lib/utils";
 
 
 const navLinks = [
-  { name: "About", href: "#about" },
-  { name: "Events", href: "#events" },
-  { name: "Spotlight", href: "#spotlight" },
-  { name: "Resources", href: "#resources" },
-  { name: "Join us", href: "#join" },
+  { name: "About", href: "/#about" },
+  { name: "Events", href: "/#events" },
+  { name: "Spotlight", href: "/#spotlight" },
+  { name: "Resources", href: "/#resources" },
+  { name: "Join us", href: "/#join" },
 ];
 
 const navItemVariants = {
@@ -75,14 +75,17 @@ export function Navbar({menuOpen, setMenuOpen}: {
   setMenuOpen: React.Dispatch<React.SetStateAction<boolean>>
 }) {
   const [isScrolled, setIsScrolled] = React.useState(false);
-  const handleScroll = (id: string) => {
-    setMenuOpen(!menuOpen)
+  const handleScroll = (href: string) => {
+    setMenuOpen(false);
+    const id = href.replace(/^\/?#/, "");
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({
         behavior: "smooth",
         block: "start",
       });
+    } else {
+      window.location.href = href.startsWith("/") ? href : `/${href}`;
     }
   }
   React.useEffect(() => {

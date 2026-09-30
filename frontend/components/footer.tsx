@@ -40,7 +40,9 @@ const quickLinks = [
   { label: "About Us", href: "/#about" },
   { label: "Events", href: "/#events" },
   { label: "Membership", href: "/#join" },
-  { label: "Contact Us", href: "/#contact" },
+  { label: "Contact Us", href: "/contact" },
+  { label: "Privacy Policy", href: "/privacy" },
+  { label: "Terms of Use", href: "/terms" },
 ];
 
 const resources = [
@@ -52,22 +54,25 @@ const resources = [
 
 const connect = [
   { label: "Instagram", href: "https://www.instagram.com/ieee_unilag" },
+  { label: "X (Twitter)", href: "https://x.com/ieee_unilag" },
   { label: "LinkedIn", href: "https://www.linkedin.com/company/ieee-unilag-sb" },
   { label: "Substack", href: "https://ieeeunilag.substack.com" },
-  { label: "WhatsApp Community", href: "https://chat.whatsapp.com/ieeeunilag" },
+  { label: "WhatsApp Community", href: "https://chat.whatsapp.com/LocjYkjFamc9sqGdFYpGlC" },
 ];
 
 function FooterColumn({
   title,
   links,
   className,
+  id,
 }: {
   title: string;
   links: { label: string; href: string }[];
   className?: string;
+  id?: string;
 }) {
   return (
-    <div className={cn("flex flex-col gap-4", className)}>
+    <div id={id} className={cn("flex flex-col gap-4 scroll-mt-24", className)}>
       <h3 className="text-sm font-semibold text-white">{title}</h3>
       <ul className="flex flex-col gap-2">
         {links.map(({ label, href }) => (
@@ -98,7 +103,7 @@ export function Footer() {
             </p>
           </div>
           <FooterColumn title="Quick Links" links={quickLinks} />
-          <FooterColumn title="Resources" links={resources} />
+          <FooterColumn title="Resources" links={resources} id="resources" />
           <FooterColumn title="Connect" links={connect} />
         </div>
       </div>
