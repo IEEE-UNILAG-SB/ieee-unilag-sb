@@ -29,7 +29,7 @@ const benefits = [
 
 export function JoinSection() {
   return (
-    <section id="join" className="w-full bg-[#F5F8FF] py-16 md:py-20">
+    <section id="join" className="w-full bg-[#F5F8FF] py-16 md:py-20 scroll-mt-24">
       <div className="mx-auto max-w-6xl px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -88,6 +88,15 @@ export function JoinSection() {
               >
                 Join IEEE
                 <ArrowRight className="ml-2 h-4 w-4" />
+              </a>
+            </Button>
+            <Button asChild size="lg" variant="outline" className="rounded-full px-8">
+              <a
+                href="https://bit.ly/IEEEdatabase"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Join the Community
               </a>
             </Button>
             <Button asChild size="lg" variant="outline" className="rounded-full px-8">

@@ -12,7 +12,7 @@ type arrayStat = {
 const statArray: arrayStat[] = [
   { users: "500+",   label: "Active Members" },
   { users: "120+",   label: "Events Annually" },  
-  { users: "15",     label: "Technical Societies" },
+  { users: "6",      label: "Technical Societies" },
   { users: "Global", label: "Network Reach" },  
 ]
 

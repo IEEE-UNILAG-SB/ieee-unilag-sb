@@ -68,21 +68,13 @@ export function NewsletterSection() {
           )}
         </form>
 
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-2">
-          <div className="flex -space-x-2">
-            {[1, 2, 3].map((i) => (
-              <div
-                key={i}
-                className="h-8 w-8 rounded-full border-2 border-white bg-slate-300"
-                aria-hidden
-              />
-            ))}
-          </div>
-          <span className="flex h-8 min-w-8 items-center justify-center rounded-full bg-blue-600 px-2 text-xs font-medium text-white">
-            +4
-          </span>
-          <span className="text-sm text-zinc-600">Join 200+ subscribers</span>
-        </div>
+        <p className="mt-4 text-xs text-zinc-500">
+          We respect your privacy. Unsubscribe anytime. See our{" "}
+          <a href="/privacy" className="underline hover:text-zinc-700">
+            Privacy Policy
+          </a>
+          .
+        </p>
       </div>
     </section>
   );

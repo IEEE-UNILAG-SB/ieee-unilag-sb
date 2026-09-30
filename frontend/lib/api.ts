@@ -4,6 +4,7 @@ export interface EventData {
   _id: string;
   header: string;
   body: string;
+  date?: string;
   location: string;
   banner_url: string;
   registration_link: string;
@@ -25,6 +26,13 @@ export interface PaginatedResponse<T> {
 export interface ApiError {
   message: string;
   errors?: Array<{ msg: string; param: string }>;
+}
+
+export interface ContactPayload {
+  name: string;
+  email: string;
+  subject?: string;
+  message: string;
 }
 
 async function fetchApi<T>(path: string, options?: RequestInit): Promise<T> {
@@ -62,5 +70,12 @@ export async function subscribeToNewsletter(email: string): Promise<{ message: s
   return fetchApi<{ message: string }>("/api/v1/newsletter/signup", {
     method: "POST",
     body: JSON.stringify({ email }),
+  });
+}
+
+export async function sendContactMessage(payload: ContactPayload): Promise<{ message: string }> {
+  return fetchApi<{ message: string }>("/api/v1/contact", {
+    method: "POST",
+    body: JSON.stringify(payload),
   });
 }

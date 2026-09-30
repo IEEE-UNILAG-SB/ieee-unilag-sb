@@ -15,7 +15,8 @@ const ArrayText: string[] = [
 const WWA = () => {
   return (
     <motion.div
-      className="flex flex-col xl:flex-row justify-between bg-[#F5F8FF] min-h-159.25 items-center  md:px-20 py-10"
+      id="about"
+      className="flex flex-col xl:flex-row justify-between bg-[#F5F8FF] min-h-159.25 items-center  md:px-20 py-10 scroll-mt-24"
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
