@@ -1,4 +1,5 @@
 'use client'
+import Image from "next/image";
 import { MapPin, ArrowRight, CalendarDays } from "lucide-react"
 import { EventCardType, EventsSectionProps } from "@/lib/types"
 
@@ -20,10 +21,15 @@ const EventCard = ( {data}: EventsSectionProps) => {
   return (
     <article className="bg-white flex flex-col justify-between gap-y-3.5 p-5 rounded-[30px] w-full h-auto">
       <section className="flex flex-col gap-y-3.5">
-        <img
-        className="rounded-t-4xl"
-        src={data.image}
-        alt={data.title} />
+        <div className="relative w-full aspect-[4/3] overflow-hidden rounded-t-4xl">
+          <Image
+            src={data.image}
+            alt={data.title}
+            fill
+            sizes="(max-width: 1024px) 100vw, 33vw"
+            className="object-cover"
+          />
+        </div>
         <div className="flex flex-col gap-y-2">
           <h2 className="font-inter text-[18px] font-medium text-[#475569]">{data.title}</h2>
           <p className="font-inter text-[12px] text-[#475569]">{data.description}</p>
