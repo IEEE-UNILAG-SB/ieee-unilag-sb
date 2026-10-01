@@ -1,3 +1,5 @@
+// NODE RUNTIME ONLY — never import this module from proxy.ts, middleware,
+// or any Edge runtime route (see note in lib/auth.ts).
 import { Db, MongoClient } from "mongodb";
 
 const uri = process.env.MONGODB_URI ?? "";

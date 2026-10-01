@@ -1,3 +1,8 @@
+// NODE RUNTIME ONLY — never import this module (or lib/mongo.ts) from
+// proxy.ts, middleware, or any Edge runtime route. The mongodb driver is a
+// Node.js native module and cannot load in Edge/Deno runtimes (breaks
+// Netlify Edge bundling). Route protection must use an edge-safe check
+// (e.g. getSessionCookie) with per-page server verification instead.
 import { betterAuth } from "better-auth";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
 import { nextCookies } from "better-auth/next-js";
