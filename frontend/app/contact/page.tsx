@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { sendContactMessage } from "@/lib/api";
+import { CONTACT_EMAIL } from "@/lib/site";
 
 export default function ContactPage() {
   const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
@@ -146,10 +147,10 @@ export default function ContactPage() {
               </div>
               <h3 className="font-semibold text-[#1E293B] mb-2">Email</h3>
               <a
-                href="mailto:ieeeunilagchapter@gmail.com"
+                href={`mailto:${CONTACT_EMAIL}`}
                 className="text-[#00629B] hover:underline"
               >
-                ieeeunilagchapter@gmail.com
+                {CONTACT_EMAIL}
               </a>
             </div>
 

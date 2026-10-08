@@ -3,6 +3,7 @@
 import { motion } from "motion/react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Users, BookOpen, Trophy, Globe } from "lucide-react";
+import { CONTACT_EMAIL } from "@/lib/site";
 
 const benefits = [
   {
@@ -100,7 +101,7 @@ export function JoinSection() {
               </a>
             </Button>
             <Button asChild size="lg" variant="outline" className="rounded-full px-8">
-              <a href="mailto:ieeeunilagchapter@gmail.com">Contact Us</a>
+              <a href={`mailto:${CONTACT_EMAIL}`}>Contact Us</a>
             </Button>
           </div>
         </motion.div>

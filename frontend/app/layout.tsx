@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Space_Grotesk, Inter } from "next/font/google";
 import "./globals.css";
+import { CONTACT_EMAIL } from "@/lib/site";
 
 const baseUrl =
   process.env.NEXT_PUBLIC_BASE_URL ?? "https://ieee-unilag-sb.vercel.app";
@@ -37,7 +38,7 @@ const jsonLd = {
   name: "IEEE UNILAG Student Branch",
   url: baseUrl,
   logo: `${baseUrl}/IEEE-Logo.png`,
-  email: "ieeeunilagchapter@gmail.com",
+  email: CONTACT_EMAIL,
   address: {
     "@type": "PostalAddress",
     streetAddress: "Department of Electrical & Electronics Engineering, University of Lagos",

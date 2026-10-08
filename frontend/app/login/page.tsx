@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,41 +9,86 @@ import { authClient } from "@/lib/auth-client";
 const googleEnabled =
   process.env.NEXT_PUBLIC_AUTH_GOOGLE_ENABLED === "true";
 
-function friendlyError(code?: string, fallback?: string): string {
-  if (!code) return fallback ?? "Something went wrong. Please try again.";
-  if (code === "EMAIL_NOT_VERIFIED") {
-    return "Please verify your email before signing in. Check your inbox for the verification link.";
+// Allow only same-origin paths. Rejects absolute URLs, protocol-relative
+// URLs, backslash tricks (browsers normalize \ to /), and self-referential
+// /login in all its forms (exact, trailing slash, query, fragment —
+// searchParams.get() returns the decoded value, so encoded variants such as
+// /login%2F or /login%3Fx arrive decoded and are caught too). Returns "/"
+// for anything else, including null.
+export function sanitizeNext(raw: string | null): string {
+  if (!raw) return "/";
+  if (!raw.startsWith("/") || raw.startsWith("//")) return "/";
+  if (raw.includes("\\")) return "/";
+  if (
+    raw === "/login" ||
+    raw.startsWith("/login/") ||
+    raw.startsWith("/login?") ||
+    raw.startsWith("/login#")
+  )
+    return "/";
+  return raw;
+}
+
+export function friendlyError(code?: string): string {
+  switch (code) {
+    case "INVALID_EMAIL_OR_PASSWORD":
+    case "INVALID_CREDENTIALS":
+      return "Incorrect email or password. Please try again.";
+    case "EMAIL_NOT_VERIFIED":
+      return "Please verify your email before signing in. Check your inbox for the verification link.";
+    case "USER_ALREADY_EXISTS":
+    case "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL":
+      return "An account with this email already exists. Try signing in instead.";
+    case "ACCOUNT_NOT_LINKED":
+    case "OAUTH_ACCOUNT_NOT_LINKED":
+      return "This email is already registered with another sign-in method. Sign in with your original method first, then link Google from settings.";
+    case "TOO_MANY_REQUESTS":
+    case "RATE_LIMITED":
+      return "Too many attempts. Please wait a minute and try again.";
+    default:
+      return "Something went wrong. Please try again.";
   }
-  if (code === "INVALID_EMAIL_OR_PASSWORD" || code === "INVALID_CREDENTIALS") {
-    return "Incorrect email or password. Please try again.";
-  }
-  if (code === "USER_ALREADY_EXISTS" || code === "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL") {
-    return "An account with this email already exists. Try signing in instead.";
-  }
-  if (code === "ACCOUNT_NOT_LINKED" || code === "OAUTH_ACCOUNT_NOT_LINKED") {
-    return "This email is already registered with another sign-in method. Sign in with your original method first, then link Google from settings.";
-  }
-  if (code === "TOO_MANY_REQUESTS" || code === "RATE_LIMITED") {
-    return "Too many attempts. Please wait a minute and try again.";
-  }
-  return fallback ?? "Something went wrong. Please try again.";
 }
 
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const next = searchParams.get("next") || "/";
+  const next = sanitizeNext(searchParams.get("next"));
 
+  const {
+    data: session,
+    isPending: sessionPending,
+    error: sessionError,
+    refetch: refetchSession,
+  } = authClient.useSession();
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "google" | "error" | "success">("idle");
   const [message, setMessage] = useState("");
+  const messageRef = useRef<HTMLParagraphElement>(null);
+
+  useEffect(() => {
+    if (!sessionPending && session) {
+      router.replace(next);
+    }
+  }, [sessionPending, session, next, router]);
+
+  useEffect(() => {
+    if (status === "error" || status === "success") {
+      messageRef.current?.focus();
+    }
+  }, [status]);
 
   async function handleEmailSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (status === "loading") return;
+    if (mode === "signup" && !name.trim()) {
+      setStatus("error");
+      setMessage("Please enter your name.");
+      return;
+    }
     setStatus("loading");
     setMessage("");
 
@@ -57,11 +102,14 @@ function LoginForm() {
         });
         if (error) {
           setStatus("error");
-          setMessage(friendlyError(error.code, error.message));
+          setMessage(friendlyError(error.code));
           return;
         }
         setStatus("success");
         setMessage("Account created! Redirecting…");
+        // NOTE: navigates assuming a session was issued. This holds while
+        // requireEmailVerification is off server-side; if verification is ever
+        // enabled, show "check your inbox" here instead of navigating.
         router.push(next);
         router.refresh();
         return;
@@ -74,16 +122,16 @@ function LoginForm() {
       });
       if (error) {
         setStatus("error");
-        setMessage(friendlyError(error.code, error.message));
+        setMessage(friendlyError(error.code));
         return;
       }
       setStatus("success");
       setMessage("Signed in! Redirecting…");
       router.push(next);
       router.refresh();
-    } catch (err) {
+    } catch {
       setStatus("error");
-      setMessage(err instanceof Error ? err.message : "Something went wrong.");
+      setMessage(friendlyError());
     }
   }
 
@@ -92,17 +140,55 @@ function LoginForm() {
     setStatus("google");
     setMessage("");
     try {
-      await authClient.signIn.social({
+      const res = (await authClient.signIn.social({
         provider: "google",
         callbackURL: next,
-      });
-    } catch (err) {
+      })) as unknown as { error?: { code?: string } | null } | void;
+      if (res && typeof res === "object" && "error" in res && res.error) {
+        // Resolved-error shape (no throw, no redirect): surface it instead
+        // of wedging the button.
+        setStatus("error");
+        setMessage(friendlyError(res.error.code));
+        return;
+      }
+      // Reached only if no redirect happened (blocked navigation or
+      // swallowed failure) — release the button instead of wedging it.
+      setStatus("idle");
+    } catch {
       setStatus("error");
-      setMessage(err instanceof Error ? err.message : "Google sign-in failed.");
+      setMessage(friendlyError());
     }
   }
 
   const busy = status === "loading" || status === "google";
+
+  if (sessionPending || session) {
+    return (
+      <div className="w-full max-w-md text-center">
+        <p role="status" className="text-sm text-[#64748B]">Loading…</p>
+      </div>
+    );
+  }
+
+  if (sessionError) {
+    return (
+      <div className="w-full max-w-md text-center space-y-4">
+        <p className="text-sm text-red-600">
+          Could not check your sign-in status. Please try again.
+        </p>
+        <Button
+          type="button"
+          variant="outline"
+          className="rounded-full px-6"
+          onClick={() => {
+            refetchSession();
+          }}
+        >
+          Try again
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full max-w-md">
@@ -136,6 +222,7 @@ function LoginForm() {
       <div className="flex rounded-full bg-[#F5F8FF] border border-[#E2E8F0] p-1 mb-6">
         <button
           type="button"
+          aria-pressed={mode === "signin"}
           onClick={() => setMode("signin")}
           className={`flex-1 rounded-full py-2 text-sm font-medium transition-colors ${
             mode === "signin" ? "bg-white shadow-sm text-[#1E293B]" : "text-[#64748B]"
@@ -145,6 +232,7 @@ function LoginForm() {
         </button>
         <button
           type="button"
+          aria-pressed={mode === "signup"}
           onClick={() => setMode("signup")}
           className={`flex-1 rounded-full py-2 text-sm font-medium transition-colors ${
             mode === "signup" ? "bg-white shadow-sm text-[#1E293B]" : "text-[#64748B]"
@@ -208,6 +296,9 @@ function LoginForm() {
 
         {message && (
           <p
+            ref={messageRef}
+            tabIndex={-1}
+            role={status === "success" ? "status" : "alert"}
             className={`text-sm ${
               status === "success" ? "text-green-600" : "text-red-600"
             }`}
