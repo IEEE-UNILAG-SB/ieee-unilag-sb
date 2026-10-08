@@ -1,4 +1,5 @@
 import mongoose, { Document, Model, Schema } from "mongoose";
+import { EMAIL_PATTERN } from "./validators";
 
 export interface ISubscriber extends Document {
   email: string;
@@ -13,10 +14,7 @@ const subscriberSchema: Schema = new Schema(
       unique: true,
       trim: true,
       lowercase: true,
-      match: [
-        /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
-        "Please add a valid email",
-      ],
+      match: [EMAIL_PATTERN, "Please add a valid email"],
     },
     subscribedAt: {
       type: Date,

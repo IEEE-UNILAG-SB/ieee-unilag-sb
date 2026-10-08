@@ -1,4 +1,5 @@
 import mongoose, { Document, Model, Schema } from "mongoose";
+import { EMAIL_PATTERN } from "./validators";
 
 export interface IContactMessage extends Document {
   name: string;
@@ -20,10 +21,7 @@ const contactMessageSchema: Schema = new Schema(
       required: [true, "Email is required"],
       trim: true,
       lowercase: true,
-      match: [
-        /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
-        "Please add a valid email",
-      ],
+      match: [EMAIL_PATTERN, "Please add a valid email"],
     },
     subject: {
       type: String,

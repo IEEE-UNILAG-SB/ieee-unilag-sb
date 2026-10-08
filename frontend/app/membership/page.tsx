@@ -3,6 +3,7 @@
 import { motion } from "motion/react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Check } from "lucide-react";
+import { CONTACT_EMAIL } from "@/lib/site";
 
 const benefits = [
   "Access to IEEE Xplore digital library",
@@ -83,8 +84,8 @@ export default function MembershipPage() {
             </Button>
             <p className="mt-4 text-sm text-[#64748B]">
               Questions? Email us at{" "}
-              <a href="mailto:ieeeunilagchapter@gmail.com" className="text-[#00629B] underline">
-                ieeeunilagchapter@gmail.com
+              <a href={`mailto:${CONTACT_EMAIL}`} className="text-[#00629B] underline">
+                {CONTACT_EMAIL}
               </a>
             </p>
           </div>

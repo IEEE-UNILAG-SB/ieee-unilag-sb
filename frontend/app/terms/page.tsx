@@ -1,3 +1,5 @@
+import { CONTACT_EMAIL } from "@/lib/site";
+
 export default function TermsPage() {
   return (
     <div className="min-h-screen bg-background">
@@ -57,10 +59,10 @@ export default function TermsPage() {
             <p>
               Questions about these terms:{" "}
               <a
-                href="mailto:ieeeunilagchapter@gmail.com"
+                href={`mailto:${CONTACT_EMAIL}`}
                 className="text-[#00629B] underline"
               >
-                ieeeunilagchapter@gmail.com
+                {CONTACT_EMAIL}
               </a>
             </p>
           </section>

@@ -1,6 +1,7 @@
 import "dotenv/config";
 import mongoose from "mongoose";
 import Event from "../models/events";
+import { SEED_WIPE_FLAG, seedAllowed } from "./seedGuard";
 
 const sampleEvents = [
   {
@@ -31,6 +32,13 @@ const sampleEvents = [
 
 async function seed() {
   try {
+    if (!seedAllowed()) {
+      console.error(
+        `Refusing to wipe events in production without ${SEED_WIPE_FLAG}`,
+      );
+      process.exit(1);
+    }
+
     await mongoose.connect(process.env.MONGODB_URI || "", {
       serverSelectionTimeoutMS: 5000,
     });
@@ -44,8 +52,8 @@ async function seed() {
 
     await mongoose.disconnect();
     console.log("Done");
-  } catch (err: any) {
-    console.error(`Seed failed: ${err.message}`);
+  } catch {
+    console.error("Seed failed: could not connect to MongoDB");
     process.exit(1);
   }
 }

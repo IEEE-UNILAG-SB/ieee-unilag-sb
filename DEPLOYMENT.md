@@ -52,6 +52,7 @@
    - `PORT` = `5000`
    - `MONGODB_URI` = (your Atlas connection string from Step 1)
    - `FRONTEND_URL` = (your Vercel URL from Step 4 — set this after)
+   - `ADMIN_API_KEY` = (generate with `openssl rand -hex 32`)
 6. Click **Create Web Service**
 7. Wait for deploy to finish (~2-3 minutes)
 8. Copy your Render URL: `https://ieee-unilag-sb-backend.onrender.com`
@@ -67,6 +68,9 @@
 5. Configure environment variables:
    - `NEXT_PUBLIC_API_URL` = `https://ieee-unilag-sb-backend.onrender.com`
    - `NEXT_PUBLIC_BASE_URL` = `https://your-vercel-url.vercel.app`
+   - `BETTER_AUTH_SECRET` = (generate with `openssl rand -base64 32`)
+    - `BETTER_AUTH_URL` = (your Vercel URL, e.g. `https://your-vercel-url.vercel.app`)
+    - `MONGODB_URI` = (same Atlas connection string from Step 1)
 6. Click **Deploy**
 7. Wait for deploy to finish (~1-2 minutes)
 8. Copy your Vercel URL
@@ -91,14 +95,14 @@
 
 ---
 
-## Step 7: Seed Production Database
+## Step 7: Seed Database (Staging Only)
 
 1. Go to your Render dashboard → your backend service → **Shell**
 2. Run:
    ```bash
-   npm run seed
+   npm run seed -- --i-know-this-wipes-events
    ```
-3. This populates your production database with sample events
+3. Warning: seed staging only — this wipes all events. Production requires the Render shell with the `--i-know-this-wipes-events` flag above.
 
 ---
 
